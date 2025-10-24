@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 import pandas as pd
@@ -6,6 +7,15 @@ from pathlib import Path
 
 # Initialize FastAPI
 app = FastAPI(title="Smart Fertilizer Recommender API")
+
+# Configure CORS to allow requests from HTML file
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins (for local development)
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Load models and artifacts
 MODELS_DIR = Path("models")

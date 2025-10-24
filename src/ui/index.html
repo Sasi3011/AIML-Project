@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌾 Smart Fertilizer Recommender</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-container {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-container.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .result-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .result-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .result-card-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .result-card-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .result-card-value {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .error-message {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌾 Smart Fertilizer Recommender</h1>
+            <p>Get the right fertilizer type and quantity for your farm</p>
+        </div>
+
+        <div class="form-container">
+            <form id="fertilizerForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="crop">Crop Type</label>
+                        <select id="crop" required>
+                            <option value="">Select Crop</option>
+                            <option value="Rice">Rice</option>
+                            <option value="Wheat">Wheat</option>
+                            <option value="Groundnut">Groundnut</option>
+                            <option value="Cotton">Cotton</option>
+                            <option value="Tomato">Tomato</option>
+                            <option value="Maize">Maize</option>
+                            <option value="Sugarcane">Sugarcane</option>
+                            <option value="Potato">Potato</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="region">Region</label>
+                        <select id="region" required>
+                            <option value="">Select Region</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="soil">Soil Type</label>
+                        <select id="soil" required>
+                            <option value="">Select Soil Type</option>
+                            <option value="Loamy">Loamy</option>
+                            <option value="Clay">Clay</option>
+                            <option value="Sandy">Sandy</option>
+                            <option value="Red">Red</option>
+                            <option value="Black">Black</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ph">Soil pH (3.0 - 9.0)</label>
+                        <input type="number" id="ph" min="3.0" max="9.0" step="0.1" value="6.5" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nitrogen">Nitrogen Level (mg/kg)</label>
+                        <input type="number" id="nitrogen" min="0" max="300" value="120" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phosphorus">Phosphorus Level (mg/kg)</label>
+                        <input type="number" id="phosphorus" min="0" max="150" value="40" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="potassium">Potassium Level (mg/kg)</label>
+                        <input type="number" id="potassium" min="0" max="300" value="180" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="carbon">Organic Carbon (%)</label>
+                        <input type="number" id="carbon" min="0" max="5" step="0.1" value="1.2" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="moisture">Moisture Content (%)</label>
+                        <input type="number" id="moisture" min="0" max="100" value="25" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rainfall">Rainfall (mm)</label>
+                        <input type="number" id="rainfall" min="0" max="1500" value="600" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="temperature">Temperature (°C)</label>
+                        <input type="number" id="temperature" min="0" max="50" value="30" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="plantAge">Plant Age (weeks)</label>
+                        <input type="number" id="plantAge" min="1" max="52" value="8" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="timing">Application Timing</label>
+                        <select id="timing" required>
+                            <option value="">Select Timing</option>
+                            <option value="Before sowing">Before sowing</option>
+                            <option value="After sowing">After sowing</option>
+                            <option value="Mid-growth">Mid-growth</option>
+                            <option value="Flowering stage">Flowering stage</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    🔍 Get Recommendation
+                </button>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 10px;">Analyzing your data...</p>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <div class="result-container" id="resultContainer">
+                <h2 class="result-title">✅ Recommendation Generated</h2>
+                <div class="result-cards">
+                    <div class="result-card">
+                        <div class="result-card-icon">🌿</div>
+                        <div class="result-card-label">Fertilizer Type</div>
+                        <div class="result-card-value" id="fertType">-</div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-card-icon">⚖️</div>
+                        <div class="result-card-label">Recommended Quantity</div>
+                        <div class="result-card-value" id="fertQty">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Made with ❤️ by Sasi | Smart Fertilizer Recommender 2025
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000/predict';
+
+        const form = document.getElementById('fertilizerForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loading = document.getElementById('loading');
+        const errorMessage = document.getElementById('errorMessage');
+        const resultContainer = document.getElementById('resultContainer');
+        const fertType = document.getElementById('fertType');
+        const fertQty = document.getElementById('fertQty');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Hide previous results/errors
+            resultContainer.classList.remove('show');
+            errorMessage.classList.remove('show');
+            loading.classList.add('show');
+            submitBtn.disabled = true;
+
+            // Collect form data
+            const payload = {
+                Crop_Type: document.getElementById('crop').value,
+                Region: document.getElementById('region').value,
+                Soil_Type: document.getElementById('soil').value,
+                Soil_pH: parseFloat(document.getElementById('ph').value),
+                Nitrogen_Level: parseFloat(document.getElementById('nitrogen').value),
+                Phosphorus_Level: parseFloat(document.getElementById('phosphorus').value),
+                Potassium_Level: parseFloat(document.getElementById('potassium').value),
+                Organic_Carbon: parseFloat(document.getElementById('carbon').value),
+                Moisture_Content: parseFloat(document.getElementById('moisture').value),
+                Rainfall_mm: parseFloat(document.getElementById('rainfall').value),
+                Temperature_C: parseFloat(document.getElementById('temperature').value),
+                Plant_Age_Weeks: parseInt(document.getElementById('plantAge').value),
+                Application_Timing: document.getElementById('timing').value
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                loading.classList.remove('show');
+                submitBtn.disabled = false;
+
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    // Display results
+                    fertType.textContent = result.Fertilizer_Type;
+                    fertQty.textContent = `${result.Recommended_Quantity_kg_per_acre} kg/acre`;
+                    resultContainer.classList.add('show');
+                    
+                    // Scroll to results
+                    resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    const error = await response.json();
+                    showError(`API Error: ${error.detail || 'Unknown error occurred'}`);
+                }
+            } catch (error) {
+                loading.classList.remove('show');
+                submitBtn.disabled = false;
+                
+                if (error.message.includes('Failed to fetch')) {
+                    showError('❌ Could not connect to the API server. Please make sure FastAPI is running on http://127.0.0.1:8000');
+                } else {
+                    showError(`Error: ${error.message}`);
+                }
+            }
+        });
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+            errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
