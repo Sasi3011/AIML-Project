@@ -3,8 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌾 Smart Fertilizer Recommender</title>
+    <title>Smart Fertilizer Recommendation System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        :root {
+            --primary: #10B981;
+            --primary-dark: #0D9E6F;
+            --secondary: #3B82F6;
+            --dark: #1F2937;
+            --light: #F9FAFB;
+            --gray: #6B7280;
+            --light-gray: #E5E7EB;
+            --success: #10B981;
+            --success-dark: #0D9E6F;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,201 +26,247 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: #F3F4F6;
+            color: var(--dark);
+            line-height: 1.5;
             min-height: 100vh;
-            padding: 20px;
+            padding: 2rem 1rem;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1400px;
+            width: 95%;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             overflow: hidden;
+            border: 1px solid var(--light-gray);
         }
 
         .header {
-            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 30px;
+            padding: 2.5rem 2rem;
             text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
         }
 
         .header p {
-            font-size: 1.1em;
+            font-size: 1.1rem;
             opacity: 0.9;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
 
         .form-container {
-            padding: 40px;
+            padding: 2.5rem 3rem;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (min-width: 1200px) {
+            .form-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (min-width: 1600px) {
+            .form-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
         }
 
         .form-group {
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 1.25rem;
         }
 
-        .form-group label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-            font-size: 0.95em;
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.875rem;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
         }
 
-        .form-group input,
-        .form-group select {
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: all 0.3s ease;
+        input, select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 0.5rem;
+            font-size: 0.9375rem;
+            transition: all 0.2s;
+            background-color: white;
+            color: var(--dark);
+            height: 44px;
         }
 
-        .form-group input:focus,
-        .form-group select:focus {
+        input:focus, select:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
         }
 
         .submit-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
+            padding: 0.875rem 1.5rem;
+            font-size: 1rem;
             font-weight: 600;
+            border-radius: 0.5rem;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            margin-top: 10px;
+            width: 100%;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
         }
 
         .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
-        .submit-btn:active {
-            transform: translateY(0);
+        .loading p {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
-
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        
+        .icon {
+            width: 1.1em;
+            height: 1.1em;
+            margin-right: 0.5rem;
+            color: var(--primary);
+            stroke-width: 1.5px;
         }
-
-        .result-container {
-            display: none;
-            margin-top: 30px;
-            padding: 30px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 15px;
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .result-container.show {
-            display: block;
-        }
-
-        .result-title {
-            font-size: 1.5em;
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .result-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+        
+        .btn-icon {
+            width: 1.1em;
+            height: 1.1em;
+            margin-right: 0.5rem;
         }
 
         .result-card {
+            margin-top: 2rem;
+            border-radius: 0.75rem;
             background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .result-card-icon {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .result-card-label {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .result-card-value {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        .error-message {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            color: #856404;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--light-gray);
+            overflow: hidden;
             display: none;
+            animation: fadeIn 0.3s ease-in-out;
         }
-
-        .error-message.show {
+        
+        .result-card.show {
             display: block;
-            animation: slideIn 0.5s ease;
+        }
+        
+        .result-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .result-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .result-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: white;
+        }
+        
+        .result-content {
+            padding: 1.5rem;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        .result-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        
+        .result-item.highlight .result-value {
+            color: var(--primary);
+            transform: scale(1.05);
+        }
+        
+        .result-value .unit {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-left: 0.25rem;
+            font-weight: normal;
         }
 
         .loading {
             display: none;
             text-align: center;
-            margin-top: 20px;
+            margin: 1.5rem 0;
+            padding: 2rem;
+            background: #F8FAFC;
+            border-radius: 0.5rem;
+            border: 1px dashed var(--light-gray);
         }
 
-        .loading.show {
-            display: block;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
+        .spinner-icon {
             animation: spin 1s linear infinite;
-            margin: 0 auto;
+            margin: 0 auto 1rem;
+            color: var(--primary);
         }
 
         @keyframes spin {
@@ -214,13 +274,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-            font-size: 0.9em;
-            border-top: 1px solid #e0e0e0;
-        }
+        /* Removed footer as per request */
 
         @media (max-width: 768px) {
             .header h1 {
@@ -240,8 +294,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🌾 Smart Fertilizer Recommender</h1>
-            <p>Get the right fertilizer type and quantity for your farm</p>
+            <h1>🌱 Smart Fertilizer Recommendation System</h1>
         </div>
 
         <div class="form-container">
@@ -346,37 +399,41 @@
                 </div>
 
                 <button type="submit" class="submit-btn" id="submitBtn">
-                    🔍 Get Recommendation
+                    <i data-lucide="search" class="btn-icon"></i> Get Recommendation
                 </button>
             </form>
 
             <div class="loading" id="loading">
-                <div class="spinner"></div>
+                <i data-lucide="loader-2" class="spinner-icon" style="width: 2rem; height: 2rem;"></i>
                 <p style="margin-top: 10px;">Analyzing your data...</p>
             </div>
 
             <div class="error-message" id="errorMessage"></div>
 
-            <div class="result-container" id="resultContainer">
-                <h2 class="result-title">✅ Recommendation Generated</h2>
-                <div class="result-cards">
-                    <div class="result-card">
-                        <div class="result-card-icon">🌿</div>
-                        <div class="result-card-label">Fertilizer Type</div>
-                        <div class="result-card-value" id="fertType">-</div>
-                    </div>
-                    <div class="result-card">
-                        <div class="result-card-icon">⚖️</div>
-                        <div class="result-card-label">Recommended Quantity</div>
-                        <div class="result-card-value" id="fertQty">-</div>
-                    </div>
+            <div class="result-card" id="resultContainer" style="display: none;">
+        <div class="result-header">
+            <i data-lucide="check-circle" class="result-icon"></i>
+            <h3>Fertilizer Recommendation</h3>
+        </div>
+        <div class="result-content">
+            <div class="result-item">
+                <div class="result-label">
+                    <i data-lucide="leaf" class="icon"></i>
+                    <span>Fertilizer Type</span>
                 </div>
+                <div class="result-value" id="fertType">-</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">
+                    <i data-lucide="scales" class="icon"></i>
+                    <span>Recommended Quantity</span>
+                </div>
+                <div class="result-value" id="fertQty">- <span class="unit">kg/acre</span></div>
             </div>
         </div>
-
-        <div class="footer">
-            Made with ❤️ by Sasi | Smart Fertilizer Recommender 2025
+    </div>
         </div>
+
     </div>
 
     <script>
@@ -390,14 +447,48 @@
         const fertType = document.getElementById('fertType');
         const fertQty = document.getElementById('fertQty');
 
+        // Show loading state
+        function showLoading() {
+            resultContainer.style.display = 'none';
+            errorMessage.classList.remove('show');
+            loading.style.display = 'flex';
+            submitBtn.disabled = true;
+        }
+
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+            loading.style.display = 'none';
+            submitBtn.disabled = false;
+            errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Show result
+        function showResult(fertType, fertQty) {
+            document.getElementById('fertType').textContent = fertType;
+            document.getElementById('fertType').parentNode.classList.add('highlight');
+            
+            const qtyElement = document.getElementById('fertQty');
+            qtyElement.innerHTML = `${fertQty} <span class="unit">kg/acre</span>`;
+            qtyElement.parentNode.classList.add('highlight');
+            
+            resultContainer.style.display = 'block';
+            loading.style.display = 'none';
+            submitBtn.disabled = false;
+            
+            // Add a small delay to ensure the element is visible before scrolling
+            setTimeout(() => {
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+            
+            // Re-initialize Lucide icons for any new ones
+            lucide.createIcons();
+        }
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            // Hide previous results/errors
-            resultContainer.classList.remove('show');
-            errorMessage.classList.remove('show');
-            loading.classList.add('show');
-            submitBtn.disabled = true;
+            showLoading();
 
             // Collect form data
             const payload = {
@@ -425,32 +516,21 @@
                     body: JSON.stringify(payload)
                 });
 
-                loading.classList.remove('show');
-                submitBtn.disabled = false;
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+                }
 
-                if (response.ok) {
-                    const result = await response.json();
-                    
-                    // Display results
-                    fertType.textContent = result.Fertilizer_Type;
-                    fertQty.textContent = `${result.Recommended_Quantity_kg_per_acre} kg/acre`;
-                    resultContainer.classList.add('show');
-                    
-                    // Scroll to results
-                    resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                } else {
-                    const error = await response.json();
-                    showError(`API Error: ${error.detail || 'Unknown error occurred'}`);
-                }
-            } catch (error) {
-                loading.classList.remove('show');
-                submitBtn.disabled = false;
+                const data = await response.json();
+                showResult(
+                    data.Fertilizer_Type || 'Not available',
+                    data.Recommended_Quantity_kg_per_acre ? 
+                        `${data.Recommended_Quantity_kg_per_acre}` : 'Not available'
+                );
                 
-                if (error.message.includes('Failed to fetch')) {
-                    showError('❌ Could not connect to the API server. Please make sure FastAPI is running on http://127.0.0.1:8000');
-                } else {
-                    showError(`Error: ${error.message}`);
-                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError(`Error: ${error.message}. Please check your input and try again.`);
             }
         });
 
@@ -459,6 +539,10 @@
             errorMessage.classList.add('show');
             errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
+    </script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
     </script>
 </body>
 </html>

@@ -1,21 +1,28 @@
 
-# Model Card — Smart Fertilizer Recommender
+# 🌾 Smart Fertilizer Recommender — Model Card
 
-**Date:** Auto-generated
+**Generated:** Automatically  
+**Version:** 1.0  
 
-**Models:**
-- Classifier: RandomForestClassifier (fertilizer type)
-- Regressor: RandomForestRegressor (fertilizer quantity)
+**Models Used:**
+- RandomForestClassifier — Fertilizer Type  
+- RandomForestRegressor — Recommended Quantity  
 
 **Performance:**
-- Accuracy: 0.23
-- MAE: 46.02
-- R²: -0.01
+- Accuracy: 0.82  
+- MAE: 13.37  
+- R²: 0.12  
 
-**Training Data:** 1000 samples, 15 features  
-**Input Fields:** Crop Type, Soil pH, NPK levels, Region, Plant Age, etc.  
-**Output:** Fertilizer type + recommended quantity  
+**Data Summary:**
+- ~16592 samples  
+- 15 input features (Crop type, Region, Soil properties, Weather, etc.)
 
-**Usage:** Intended for smallholder farmers. The model combines expert rules and ML-based insights.  
+**Purpose:**
+To recommend the optimal fertilizer type and quantity per acre based on soil nutrients, crop type, and climate.
 
-**Limitations:** Performance may vary for unseen soil types or rare crops. Retrain annually with new data.
+**Limitations:**
+- May not generalize perfectly to new soil types or extreme weather.  
+- Retrain yearly with updated data for local calibration.  
+
+**Ethical Note:**
+Model designed for assisting, not replacing, agricultural expertise.
